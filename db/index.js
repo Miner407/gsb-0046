@@ -99,6 +99,16 @@ function prepare(sql) {
   };
 }
 
+function closeDb() {
+  if (db) {
+    try {
+      db.close();
+    } catch (e) {
+    }
+    db = null;
+  }
+}
+
 module.exports = {
   initDb,
   saveDb,
@@ -106,5 +116,6 @@ module.exports = {
   query,
   run,
   exec,
-  prepare
+  prepare,
+  closeDb
 };

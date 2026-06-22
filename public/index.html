@@ -10,929 +10,1022 @@ body { font-family: 'Microsoft YaHei', -apple-system, sans-serif; background: #f
 .header { background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%); color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
 .header h1 { font-size: 20px; font-weight: 500; }
 .header .subtitle { font-size: 13px; opacity: 0.9; margin-top: 4px; }
-.container { display: flex; min-height: calc(100vh - 60px); }
-.sidebar { width: 200px; background: #001529; color: #fff; padding: 16px 0; }
-.sidebar .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.3s; border-left: 3px solid transparent; }
+.header-stats { font-size: 13px; display: flex; gap: 16px; align-items: center; }
+.header-stats .stat-item { display: flex; align-items: center; gap: 6px; }
+.header-stats .stat-num { font-weight: 600; font-size: 16px; }
+
+.container { display: flex; min-height: calc(100vh - 72px); }
+.sidebar { width: 220px; background: #001529; color: #fff; padding: 16px 0; flex-shrink: 0; }
+.sidebar .menu-item { padding: 12px 24px; cursor: pointer; transition: all 0.3s; border-left: 3px solid transparent; font-size: 14px; }
 .sidebar .menu-item:hover { background: #1890ff20; }
 .sidebar .menu-item.active { background: #1890ff; border-left-color: #fff; }
 .main { flex: 1; padding: 24px; overflow-y: auto; }
 .page { display: none; }
 .page.active { display: block; }
+
 .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 .card-title { font-size: 16px; font-weight: 500; margin-bottom: 16px; color: #262626; display: flex; align-items: center; justify-content: space-between; }
+.card-title .title-left { display: flex; align-items: center; gap: 8px; }
+.card-title .title-icon { font-size: 18px; }
+
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
-.stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.stat-card .stat-value { font-size: 28px; font-weight: 600; color: #1890ff; }
-.stat-card .stat-label { font-size: 13px; color: #8c8c8c; margin-top: 8px; }
+.stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #1890ff; }
+.stat-card.high::before { background: #ff4d4f; }
+.stat-card.medium::before { background: #faad14; }
+.stat-card.low::before { background: #52c41a; }
+.stat-card .stat-value { font-size: 28px; font-weight: 600; color: #1890ff; display: flex; align-items: center; gap: 12px; }
 .stat-card.high .stat-value { color: #ff4d4f; }
 .stat-card.medium .stat-value { color: #faad14; }
 .stat-card.low .stat-value { color: #52c41a; }
-.filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-.filter-bar select, .filter-bar input { padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
-.filter-bar button { padding: 8px 16px; background: #1890ff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+.stat-card .stat-label { font-size: 13px; color: #8c8c8c; margin-top: 8px; }
+.stat-card .stat-sub { font-size: 12px; color: #bfbfbf; margin-top: 4px; }
+
+.filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+.filter-bar select, .filter-bar input { padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; background: #fff; min-width: 140px; }
+.filter-bar button { padding: 8px 16px; background: #1890ff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
 .filter-bar button:hover { background: #40a9ff; }
+.filter-bar button.btn-reset { background: #fff; color: #595959; border: 1px solid #d9d9d9; }
+.filter-bar button.btn-reset:hover { border-color: #1890ff; color: #1890ff; }
+
+.batch-toolbar { display: flex; gap: 12px; padding: 12px 16px; background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 4px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+.batch-toolbar .batch-info { flex: 1; color: #0050b3; font-size: 14px; }
+.batch-toolbar .batch-info strong { font-size: 16px; margin: 0 4px; }
+
 table { width: 100%; border-collapse: collapse; }
-table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-table th { background: #fafafa; font-weight: 500; color: #595959; }
+table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 14px; vertical-align: middle; }
+table th { background: #fafafa; font-weight: 500; color: #595959; white-space: nowrap; }
 table tr:hover { background: #fafafa; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+table td.checkbox-col, table th.checkbox-col { width: 40px; text-align: center; }
+input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; line-height: 1.5; }
 .badge-high { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
 .badge-medium { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
 .badge-low { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
 .badge-pending { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+.badge-confirmed { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+.badge-rejected { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
 .badge-released { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+.badge-testing { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+.badge-staging { background: #fff7e6; color: #d48806; border: 1px solid #ffd591; }
 .badge-add { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
 .badge-modify { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
 .badge-delete { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+
+.progress-tri { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: #f0f0f0; margin: 4px 0; }
+.progress-confirmed { background: #52c41a; height: 100%; transition: width 0.3s; }
+.progress-pending { background: #faad14; height: 100%; transition: width 0.3s; }
+.progress-rejected { background: #ff4d4f; height: 100%; transition: width 0.3s; }
+.progress-legend { display: flex; gap: 12px; font-size: 12px; color: #8c8c8c; margin-top: 4px; }
+.progress-legend .legend-item { display: flex; align-items: center; gap: 4px; }
+.progress-legend .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+.ring-progress { position: relative; width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center; }
+.ring-progress svg { transform: rotate(-90deg); }
+.ring-progress .ring-bg { fill: none; stroke: #f0f0f0; stroke-width: 6; }
+.ring-progress .ring-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+.ring-progress .ring-text { position: absolute; font-size: 13px; font-weight: 600; }
+.ring-progress.high .ring-text { color: #ff4d4f; }
+.ring-progress.medium .ring-text { color: #faad14; }
+.ring-progress.low .ring-text { color: #52c41a; }
+
+.release-risk-card { display: flex; align-items: center; padding: 12px; border: 1px solid #f0f0f0; border-radius: 6px; margin-bottom: 8px; transition: all 0.2s; }
+.release-risk-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-color: #1890ff; }
+.release-risk-card .risk-ring { margin-right: 16px; flex-shrink: 0; }
+.release-risk-card .release-info { flex: 1; min-width: 0; }
+.release-risk-card .release-name { font-weight: 500; font-size: 14px; color: #262626; margin-bottom: 4px; cursor: pointer; }
+.release-risk-card .release-name:hover { color: #1890ff; }
+.release-risk-card .release-meta { font-size: 12px; color: #8c8c8c; display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.release-risk-card .release-progress { flex: 1; }
+
+.pending-item { display: flex; align-items: flex-start; padding: 10px 12px; border-radius: 4px; margin-bottom: 6px; background: #fffbe6; border-left: 3px solid #faad14; }
+.pending-item.high { background: #fff1f0; border-left-color: #ff4d4f; }
+.pending-item.medium { background: #fffbe6; border-left-color: #faad14; }
+.pending-item.low { background: #f6ffed; border-left-color: #52c41a; }
+.pending-item .pending-content { flex: 1; min-width: 0; }
+.pending-item .pending-file { font-size: 13px; color: #262626; margin-bottom: 4px; font-family: Consolas, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pending-item .pending-meta { font-size: 12px; color: #8c8c8c; display: flex; gap: 10px; flex-wrap: wrap; }
+.pending-item .pending-count { margin-left: 12px; flex-shrink: 0; text-align: right; }
+.pending-item .pending-count .num { font-size: 18px; font-weight: 600; color: #faad14; }
+.pending-item.high .pending-count .num { color: #ff4d4f; }
+
+.top5-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+.top5-item:last-child { border-bottom: none; }
+.top5-item .rank { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; margin-right: 12px; flex-shrink: 0; color: #fff; }
+.top5-item .rank.top1 { background: #ff4d4f; }
+.top5-item .rank.top2 { background: #ff7a45; }
+.top5-item .rank.top3 { background: #ffa940; }
+.top5-item .rank.top4 { background: #ffc53d; }
+.top5-item .rank.top5 { background: #bae637; }
+.top5-item .top5-info { flex: 1; min-width: 0; }
+.top5-item .top5-file { font-size: 13px; font-family: Consolas, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 2px; }
+.top5-item .top5-meta { font-size: 12px; color: #8c8c8c; display: flex; gap: 10px; flex-wrap: wrap; }
+.top5-item .top5-score { flex-shrink: 0; margin-left: 12px; }
+
+.progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.progress-stat-item { background: #fafafa; padding: 12px 16px; border-radius: 6px; border: 1px solid #f0f0f0; }
+.progress-stat-item .psi-label { font-size: 12px; color: #8c8c8c; margin-bottom: 6px; }
+.progress-stat-item .psi-value { font-size: 20px; font-weight: 600; color: #262626; }
+.progress-stat-item.confirmed .psi-value { color: #52c41a; }
+.progress-stat-item.pending .psi-value { color: #faad14; }
+.progress-stat-item.rejected .psi-value { color: #ff4d4f; }
+
+.owner-bar-item { display: flex; align-items: center; padding: 8px 0; }
+.owner-bar-item .owner-name { width: 100px; font-size: 13px; color: #595959; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.owner-bar-item .owner-bar-wrap { flex: 1; height: 20px; background: #f5f5f5; border-radius: 4px; margin: 0 12px; position: relative; overflow: hidden; }
+.owner-bar-item .owner-bar-confirmed { position: absolute; left: 0; top: 0; bottom: 0; background: #52c41a; }
+.owner-bar-item .owner-bar-pending { position: absolute; left: 0; top: 0; bottom: 0; background: #faad14; }
+.owner-bar-item .owner-bar-rejected { position: absolute; left: 0; top: 0; bottom: 0; background: #ff4d4f; }
+.owner-bar-item .owner-count { width: 80px; text-align: right; font-size: 12px; color: #8c8c8c; flex-shrink: 0; }
+
 .topology-container { width: 100%; height: 500px; border: 1px solid #f0f0f0; border-radius: 8px; position: relative; overflow: hidden; background: #fafafa; }
-.topology-node { position: absolute; padding: 10px 16px; border-radius: 8px; background: #fff; border: 2px solid #1890ff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; font-size: 13px; text-align: center; min-width: 100px; }
+.topology-node { position: absolute; padding: 10px 16px; border-radius: 8px; background: #fff; border: 2px solid #1890ff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; font-size: 13px; text-align: center; min-width: 100px; transition: all 0.2s; }
+.topology-node:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 .topology-node.changed { border-color: #ff4d4f; background: #fff1f0; }
 .topology-node.high-risk { border-color: #ff4d4f; background: #fff1f0; }
 .topology-node.medium-risk { border-color: #faad14; background: #fffbe6; }
 .topology-node.low-risk { border-color: #52c41a; background: #f6ffed; }
 .topology-label { font-weight: 500; margin-bottom: 4px; }
 .topology-sub { font-size: 11px; color: #8c8c8c; }
-.board-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.board-column { background: #f5f5f5; border-radius: 8px; padding: 16px; min-height: 400px; }
-.board-column h3 { font-size: 15px; margin-bottom: 12px; color: #595959; }
-.board-card { background: #fff; border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); cursor: pointer; transition: box-shadow 0.3s; }
-.board-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.board-card .card-title { font-size: 14px; font-weight: 500; margin-bottom: 8px; }
-.board-card .card-meta { font-size: 12px; color: #8c8c8c; display: flex; justify-content: space-between; }
-.progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; margin: 8px 0; }
-.progress-fill { height: 100%; background: #1890ff; border-radius: 3px; transition: width 0.3s; }
-.empty-state { text-align: center; padding: 40px; color: #bfbfbf; }
-.btn { padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; }
-.btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
-.btn-primary:hover { background: #40a9ff; }
-.btn-success { background: #52c41a; color: #fff; border-color: #52c41a; }
+
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
 .modal-overlay.active { display: flex; }
-.modal { background: #fff; border-radius: 8px; width: 600px; max-height: 80vh; overflow-y: auto; }
-.modal-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+.modal { background: #fff; border-radius: 8px; width: 640px; max-height: 85vh; overflow-y: auto; }
+.modal.modal-lg { width: 900px; }
+.modal-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; z-index: 1; }
 .modal-title { font-size: 16px; font-weight: 500; }
-.modal-close { cursor: pointer; font-size: 20px; color: #8c8c8c; }
+.modal-close { cursor: pointer; font-size: 20px; color: #8c8c8c; line-height: 1; }
+.modal-close:hover { color: #262626; }
 .modal-body { padding: 20px; }
-.modal-footer { padding: 16px 20px; border-top: 1px solid #f0f0f0; text-align: right; }
+.modal-footer { padding: 16px 20px; border-top: 1px solid #f0f0f0; text-align: right; display: flex; gap: 12px; justify-content: flex-end; position: sticky; bottom: 0; background: #fff; }
+
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; margin-bottom: 6px; font-size: 14px; color: #595959; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
+.form-group label.required::after { content: ' *'; color: #ff4d4f; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; font-family: inherit; }
 .form-group textarea { resize: vertical; min-height: 80px; }
+.form-group .form-hint { font-size: 12px; color: #8c8c8c; margin-top: 4px; }
+
+.btn { padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; cursor: pointer; font-size: 13px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
+.btn:hover { border-color: #1890ff; color: #1890ff; }
+.btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+.btn-primary:hover { background: #40a9ff; border-color: #40a9ff; color: #fff; }
+.btn-success { background: #52c41a; color: #fff; border-color: #52c41a; }
+.btn-success:hover { background: #73d13d; border-color: #73d13d; color: #fff; }
+.btn-danger { background: #ff4d4f; color: #fff; border-color: #ff4d4f; }
+.btn-danger:hover { background: #ff7875; border-color: #ff7875; color: #fff; }
+.btn-warning { background: #faad14; color: #fff; border-color: #faad14; }
+.btn-warning:hover { background: #ffc53d; border-color: #ffc53d; color: #fff; }
+.btn-sm { padding: 4px 8px; font-size: 12px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.empty-state { text-align: center; padding: 40px 20px; color: #bfbfbf; font-size: 14px; }
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+
+.tabs { display: flex; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-item { padding: 10px 20px; cursor: pointer; font-size: 14px; color: #595959; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-item:hover { color: #1890ff; }
+.tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+.tab-item .tab-badge { display: inline-block; background: #f0f0f0; color: #595959; padding: 1px 8px; border-radius: 10px; font-size: 12px; margin-left: 6px; }
+.tab-item.active .tab-badge { background: #1890ff; color: #fff; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+.risk-detail-card { background: #fafafa; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px; border-left: 3px solid #d9d9d9; }
+.risk-detail-card.high { border-left-color: #ff4d4f; background: #fff1f0; }
+.risk-detail-card.medium { border-left-color: #faad14; background: #fffbe6; }
+.risk-detail-card.low { border-left-color: #52c41a; background: #f6ffed; }
+.risk-detail-card .rdc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.risk-detail-card .rdc-file { font-family: Consolas, monospace; font-size: 13px; color: #262626; }
+.risk-detail-card .rdc-reasons, .risk-detail-card .rdc-suggestions { margin-bottom: 6px; }
+.risk-detail-card .rdc-reasons li, .risk-detail-card .rdc-suggestions li { font-size: 13px; color: #595959; margin: 4px 0 4px 20px; }
+.risk-detail-card .rdc-suggestions { padding-top: 6px; border-top: 1px dashed #e8e8e8; }
+.risk-detail-card .rdc-label { font-size: 12px; font-weight: 500; color: #8c8c8c; margin-bottom: 4px; }
+
+.impact-service-item { display: flex; align-items: center; padding: 12px; border: 1px solid #f0f0f0; border-radius: 6px; margin-bottom: 8px; }
+.impact-service-item.direct { background: #fff1f0; border-color: #ffa39e; }
+.impact-service-item .isi-icon { font-size: 24px; margin-right: 12px; }
+.impact-service-item .isi-info { flex: 1; }
+.impact-service-item .isi-name { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+.impact-service-item .isi-reasons { font-size: 12px; color: #8c8c8c; display: flex; flex-wrap: wrap; gap: 6px; }
+.impact-service-item .isi-reason { background: #f5f5f5; padding: 2px 8px; border-radius: 4px; }
+.impact-service-item.direct .isi-reason { background: #ffa39e40; color: #cf1322; }
+
+.db-table-item { display: flex; align-items: center; padding: 10px 12px; border: 1px solid #f0f0f0; border-radius: 4px; margin-bottom: 6px; }
+.db-table-item.direct { background: #fff1f0; border-color: #ffa39e; }
+.db-table-item .dbt-icon { margin-right: 10px; font-size: 16px; }
+.db-table-item .dbt-info { flex: 1; }
+.db-table-item .dbt-name { font-family: Consolas, monospace; font-size: 13px; font-weight: 500; }
+.db-table-item .dbt-db { font-size: 12px; color: #8c8c8c; }
+.db-table-item .dbt-badge { flex-shrink: 0; }
+
+.operation-item { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; display: flex; gap: 12px; }
+.operation-item:last-child { border-bottom: none; }
+.operation-item .op-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
+.operation-item .op-icon.confirm { background: #f6ffed; color: #52c41a; }
+.operation-item .op-icon.reject { background: #fff1f0; color: #ff4d4f; }
+.operation-item .op-icon.create { background: #e6f7ff; color: #1890ff; }
+.operation-item .op-icon.update { background: #fff7e6; color: #faad14; }
+.operation-item .op-icon.default { background: #f5f5f5; color: #8c8c8c; }
+.operation-item .op-content { flex: 1; min-width: 0; }
+.operation-item .op-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.operation-item .op-type { font-weight: 500; font-size: 13px; }
+.operation-item .op-time { font-size: 12px; color: #bfbfbf; flex-shrink: 0; }
+.operation-item .op-file { font-size: 12px; color: #8c8c8c; margin-bottom: 4px; font-family: Consolas, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.operation-item .op-comment { font-size: 13px; color: #595959; background: #fafafa; padding: 6px 10px; border-radius: 4px; }
+.operation-item .op-operator { font-size: 12px; color: #8c8c8c; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 1200px) {
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .three-col { grid-template-columns: 1fr; }
+  .container { flex-direction: column; }
+  .sidebar { width: 100%; padding: 8px 0; }
+  .sidebar .menu-item { padding: 10px 16px; display: inline-block; border-left: none; border-bottom: 3px solid transparent; }
+  .sidebar .menu-item.active { border-bottom-color: #fff; border-left: none; }
+  .modal { width: 95% !important; }
+}
 </style>
 </head>
 <body>
 <div class="header">
   <div>
-    <h1>多仓库发布变更影响分析平台</h1>
+    <h1>🎯 多仓库发布变更影响分析平台</h1>
     <div class="subtitle">Multi-Repository Release Impact Analyzer</div>
   </div>
-  <div id="headerStats" style="font-size: 13px;"></div>
+  <div class="header-stats" id="headerStats"></div>
 </div>
 <div class="container">
   <div class="sidebar">
-    <div class="menu-item active" onclick="showPage('dashboard')">📊 统计看板</div>
-    <div class="menu-item" onclick="showPage('releases')">📋 发布单列表</div>
-    <div class="menu-item" onclick="showPage('topology')">🔗 影响拓扑视图</div>
-    <div class="menu-item" onclick="showPage('dependencies')">📑 服务依赖表</div>
-    <div class="menu-item" onclick="showPage('risk')">⚠️ 风险变更清单</div>
-    <div class="menu-item" onclick="showPage('pending')">⏳ 待确认影响项</div>
-    <div class="menu-item" onclick="showPage('board')">🎯 发布验收看板</div>
+    <div class="menu-item active" onclick="showPage('dashboard', event)">📊 风险概览看板</div>
+    <div class="menu-item" onclick="showPage('changes', event)">📋 变更确认清单</div>
+    <div class="menu-item" onclick="showPage('operations', event)">📝 操作记录审计</div>
   </div>
   <div class="main">
     <div id="page-dashboard" class="page active">
       <div class="stat-grid" id="overviewStats"></div>
-      <div class="card">
-        <div class="card-title">风险分布</div>
-        <div id="riskDistribution"></div>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div class="three-col">
         <div class="card">
-          <div class="card-title">变更最多的服务</div>
-          <div id="topServices"></div>
+          <div class="card-title"><div class="title-left"><span class="title-icon">📦</span>发布单风险概览</div></div>
+          <div id="releaseRiskList"></div>
         </div>
         <div class="card">
-          <div class="card-title">提交最多的人员</div>
-          <div id="topCommitters"></div>
+          <div class="card-title"><div class="title-left"><span class="title-icon">⏳</span>待确认事项<span class="badge badge-pending" id="pendingTotalBadge" style="margin-left:8px">0</span></div></div>
+          <div id="pendingList"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="title-left"><span class="title-icon">🔥</span>最高风险变更 Top5</div></div>
+          <div id="topRiskList"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="title-left"><span class="title-icon">📈</span>确认进度统计</div></div>
+        <div class="progress-stats" id="progressStats"></div>
+        <div class="two-col">
+          <div>
+            <h4 style="font-size:14px;color:#595959;margin-bottom:12px;">按负责人分布</h4>
+            <div id="ownerDistribution"></div>
+          </div>
+          <div>
+            <h4 style="font-size:14px;color:#595959;margin-bottom:12px;">按发布单确认进度</h4>
+            <div id="releaseProgressList"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div id="page-releases" class="page">
+    <div id="page-changes" class="page">
       <div class="card">
-        <div class="card-title">
-          发布单列表
-          <button class="btn btn-primary" onclick="showCreateReleaseModal()">+ 新建发布单</button>
+        <div class="card-title"><div class="title-left"><span class="title-icon">📋</span>变更确认清单</div></div>
+        <div class="filter-bar" id="changesFilterBar"></div>
+        <div class="batch-toolbar" id="batchToolbar" style="display:none;">
+          <div class="batch-info">已选择 <strong id="selectedCount">0</strong> 项</div>
+          <button class="btn btn-success" onclick="openBatchConfirmModal()">✅ 批量确认</button>
+          <button class="btn btn-danger" onclick="openBatchRejectModal()">❌ 批量退回</button>
         </div>
-        <div class="filter-bar">
-          <select id="releaseStatusFilter" onchange="loadReleases()">
-            <option value="">全部状态</option>
-            <option value="pending">待发布</option>
-            <option value="testing">测试中</option>
-            <option value="released">已发布</option>
-          </select>
-          <input id="releaseKeyword" placeholder="搜索发布单名称..." onkeyup="if(event.key==='Enter')loadReleases()">
-          <button onclick="loadReleases()">搜索</button>
-        </div>
-        <div id="releaseList"></div>
+        <div id="changeListTable"></div>
       </div>
     </div>
 
-    <div id="page-topology" class="page">
+    <div id="page-operations" class="page">
       <div class="card">
-        <div class="card-title">
-          影响拓扑视图
-          <select id="topologyRelease" onchange="loadTopology()">
-          </select>
-        </div>
-        <div class="topology-container" id="topologyContainer"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">影响分析详情</div>
-        <div id="impactDetails"></div>
-      </div>
-    </div>
-
-    <div id="page-dependencies" class="page">
-      <div class="card">
-        <div class="card-title">服务依赖关系表</div>
-        <div class="filter-bar">
-          <select id="depServiceFilter" onchange="loadDependencies()">
-            <option value="">全部服务</option>
-          </select>
-          <select id="depTypeFilter" onchange="loadDependencies()">
-            <option value="">全部类型</option>
-            <option value="rpc">RPC调用</option>
-            <option value="http">HTTP调用</option>
-            <option value="db">数据库依赖</option>
-          </select>
-        </div>
-        <div id="dependencyTable"></div>
-      </div>
-    </div>
-
-    <div id="page-risk" class="page">
-      <div class="card">
-        <div class="card-title">风险变更清单</div>
-        <div class="filter-bar">
-          <select id="riskLevelFilter" onchange="loadRiskChanges()">
-            <option value="">全部风险等级</option>
-            <option value="high">高风险</option>
-            <option value="medium">中风险</option>
-            <option value="low">低风险</option>
-          </select>
-          <select id="riskReleaseFilter" onchange="loadRiskChanges()">
-            <option value="">全部发布单</option>
-          </select>
-          <select id="riskServiceFilter" onchange="loadRiskChanges()">
-            <option value="">全部服务</option>
-          </select>
-        </div>
-        <div id="riskChangeList"></div>
-      </div>
-    </div>
-
-    <div id="page-pending" class="page">
-      <div class="card">
-        <div class="card-title">待确认影响项</div>
-        <div class="filter-bar">
-          <select id="pendingReleaseFilter" onchange="loadPendingChanges()">
-            <option value="">全部发布单</option>
-          </select>
-          <select id="pendingServiceFilter" onchange="loadPendingChanges()">
-            <option value="">全部服务</option>
-          </select>
-          <select id="pendingRiskFilter" onchange="loadPendingChanges()">
-            <option value="">全部风险</option>
-            <option value="high">高风险</option>
-            <option value="medium">中风险</option>
-            <option value="low">低风险</option>
-          </select>
-        </div>
-        <div id="pendingChangeList"></div>
-      </div>
-    </div>
-
-    <div id="page-board" class="page">
-      <div class="card">
-        <div class="card-title">发布验收看板</div>
-        <div class="board-container" id="releaseBoard"></div>
+        <div class="card-title"><div class="title-left"><span class="title-icon">📝</span>操作记录审计</div></div>
+        <div id="operationList"></div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="releaseModal">
+<div class="modal-overlay" id="releaseDetailModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title" id="releaseDetailTitle">发布单详情</div>
+      <span class="modal-close" onclick="closeModal('releaseDetailModal')">&times;</span>
+    </div>
+    <div class="modal-body" id="releaseDetailBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="batchConfirmModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">新建发布单</div>
-      <span class="modal-close" onclick="closeModal('releaseModal')">&times;</span>
+      <div class="modal-title">批量确认变更</div>
+      <span class="modal-close" onclick="closeModal('batchConfirmModal')">&times;</span>
     </div>
     <div class="modal-body">
-      <div class="form-group">
-        <label>发布单名称 *</label>
-        <input id="newReleaseName" placeholder="例如：2024.06.20 版本发布">
+      <div style="background:#f6ffed;border:1px solid #b7eb8f;border-radius:4px;padding:12px;margin-bottom:16px;">
+        即将确认 <strong id="batchConfirmCount" style="color:#52c41a;">0</strong> 条变更记录
       </div>
       <div class="form-group">
-        <label>版本号</label>
-        <input id="newReleaseVersion" placeholder="例如：v2.3.0">
+        <label class="required">确认人</label>
+        <input id="batchConfirmBy" placeholder="请输入确认人姓名">
       </div>
       <div class="form-group">
-        <label>计划发布日期</label>
-        <input id="newReleaseDate" type="date">
-      </div>
-      <div class="form-group">
-        <label>状态</label>
-        <select id="newReleaseStatus">
-          <option value="pending">待发布</option>
-          <option value="testing">测试中</option>
-          <option value="released">已发布</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>描述</label>
-        <textarea id="newReleaseDesc" placeholder="请输入发布单描述"></textarea>
+        <label>处理意见</label>
+        <textarea id="batchConfirmComment" placeholder="请输入确认意见（选填）"></textarea>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn" onclick="closeModal('releaseModal')">取消</button>
-      <button class="btn btn-primary" onclick="createRelease()">创建</button>
+      <button class="btn" onclick="closeModal('batchConfirmModal')">取消</button>
+      <button class="btn btn-success" onclick="executeBatchConfirm()">确认提交</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="detailModal">
-  <div class="modal" style="width: 700px;">
+<div class="modal-overlay" id="batchRejectModal">
+  <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="detailTitle">变更详情</div>
-      <span class="modal-close" onclick="closeModal('detailModal')">&times;</span>
+      <div class="modal-title">批量退回变更</div>
+      <span class="modal-close" onclick="closeModal('batchRejectModal')">&times;</span>
     </div>
-    <div class="modal-body" id="detailContent"></div>
+    <div class="modal-body">
+      <div style="background:#fff1f0;border:1px solid #ffa39e;border-radius:4px;padding:12px;margin-bottom:16px;">
+        即将退回 <strong id="batchRejectCount" style="color:#ff4d4f;">0</strong> 条变更记录
+      </div>
+      <div class="form-group">
+        <label class="required">退回人</label>
+        <input id="batchRejectBy" placeholder="请输入退回人姓名">
+      </div>
+      <div class="form-group">
+        <label class="required">退回原因</label>
+        <textarea id="batchRejectReason" placeholder="请详细描述退回原因"></textarea>
+      </div>
+      <div class="form-group">
+        <label>补充说明</label>
+        <textarea id="batchRejectComment" placeholder="其他补充说明（选填）"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('batchRejectModal')">取消</button>
+      <button class="btn btn-danger" onclick="executeBatchReject()">确认退回</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="changeDetailModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">变更详情</div>
+      <span class="modal-close" onclick="closeModal('changeDetailModal')">&times;</span>
+    </div>
+    <div class="modal-body" id="changeDetailBody"></div>
   </div>
 </div>
 
 <script>
 const API_BASE = '/api';
+let state = {
+  currentPage: 'dashboard',
+  filterOptions: null,
+  changes: [],
+  selectedIds: new Set(),
+  currentReleaseId: null,
+  currentDetailTab: 'overview'
+};
 
-function showPage(pageName) {
+function showPage(pageName, evt) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + pageName).classList.add('active');
   document.querySelectorAll('.sidebar .menu-item').forEach(m => m.classList.remove('active'));
-  event.target.classList.add('active');
-  
+  if (evt && evt.target) evt.target.classList.add('active');
+  state.currentPage = pageName;
   switch(pageName) {
     case 'dashboard': loadDashboard(); break;
-    case 'releases': loadReleases(); break;
-    case 'topology': loadTopologyInit(); break;
-    case 'dependencies': loadDependenciesInit(); break;
-    case 'risk': loadRiskInit(); break;
-    case 'pending': loadPendingInit(); break;
-    case 'board': loadBoard(); break;
+    case 'changes': loadChangesInit(); break;
+    case 'operations': loadOperationList(); break;
   }
 }
 
 async function apiGet(url) {
-  const res = await fetch(API_BASE + url);
-  return await res.json();
+  try {
+    const res = await fetch(API_BASE + url);
+    return await res.json();
+  } catch (e) {
+    console.error('API GET Error:', url, e);
+    return { data: null, error: e.message };
+  }
 }
 
 async function apiPost(url, data) {
-  const res = await fetch(API_BASE + url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
-  return await res.json();
-}
-
-async function loadDashboard() {
-  const data = await apiGet('/statistics/dashboard');
-  const d = data.data;
-  
-  const ov = d.overview;
-  document.getElementById('overviewStats').innerHTML = `
-    <div class="stat-card"><div class="stat-value">${ov.total_releases}</div><div class="stat-label">发布单总数</div></div>
-    <div class="stat-card"><div class="stat-value">${ov.total_changes}</div><div class="stat-label">变更总数</div></div>
-    <div class="stat-card"><div class="stat-value">${ov.total_services}</div><div class="stat-label">服务数</div></div>
-    <div class="stat-card"><div class="stat-value">${ov.total_repositories}</div><div class="stat-label">仓库数</div></div>
-  `;
-  
-  const riskDist = {};
-  d.risk_distribution.forEach(r => riskDist[r.risk_level] = r.count);
-  document.getElementById('riskDistribution').innerHTML = `
-    <div style="display: flex; gap: 20px; align-items: center;">
-      <div style="flex: 1;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span style="color: #ff4d4f;">高风险</span>
-          <span>${riskDist.high || 0} 条</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width: ${((riskDist.high||0)/ov.total_changes*100).toFixed(1)}%; background: #ff4d4f;"></div></div>
-      </div>
-      <div style="flex: 1;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span style="color: #faad14;">中风险</span>
-          <span>${riskDist.medium || 0} 条</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width: ${((riskDist.medium||0)/ov.total_changes*100).toFixed(1)}%; background: #faad14;"></div></div>
-      </div>
-      <div style="flex: 1;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span style="color: #52c41a;">低风险</span>
-          <span>${riskDist.low || 0} 条</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width: ${((riskDist.low||0)/ov.total_changes*100).toFixed(1)}%; background: #52c41a;"></div></div>
-      </div>
-    </div>
-  `;
-  
-  document.getElementById('topServices').innerHTML = d.top_services_by_changes.map((s, i) => `
-    <div style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-      <span style="width: 24px; height: 24px; border-radius: 50%; background: ${i<3?'#1890ff':'#d9d9d9'}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 12px;">${i+1}</span>
-      <span style="flex: 1;">${s.name}</span>
-      <span style="color: #8c8c8c;">${s.change_count} 条变更</span>
-    </div>
-  `).join('');
-  
-  document.getElementById('topCommitters').innerHTML = d.top_committers.map((c, i) => `
-    <div style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-      <span style="width: 24px; height: 24px; border-radius: 50%; background: ${i<3?'#52c41a':'#d9d9d9'}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 12px;">${i+1}</span>
-      <span style="flex: 1;">${c.committer}</span>
-      <span style="color: #8c8c8c;">${c.change_count} 条</span>
-    </div>
-  `).join('');
-  
-  const confDist = {};
-  d.confirmation_distribution.forEach(c => confDist[c.confirmed] = c.count);
-  const confirmed = confDist[1] || 0;
-  const pending = confDist[0] || 0;
-  document.getElementById('headerStats').innerHTML = `
-    已确认: <span style="color:#52c41a">${confirmed}</span> | 
-    待确认: <span style="color:#faad14">${pending}</span>
-  `;
-}
-
-async function loadReleases() {
-  const status = document.getElementById('releaseStatusFilter').value;
-  const keyword = document.getElementById('releaseKeyword').value;
-  let url = '/releases?';
-  if (status) url += 'status=' + status + '&';
-  if (keyword) url += 'keyword=' + encodeURIComponent(keyword);
-  
-  const data = await apiGet(url);
-  const releases = data.data;
-  
-  if (releases.length === 0) {
-    document.getElementById('releaseList').innerHTML = '<div class="empty-state">暂无发布单</div>';
-    return;
+  try {
+    const res = await fetch(API_BASE + url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  } catch (e) {
+    console.error('API POST Error:', url, e);
+    return { data: null, error: e.message };
   }
-  
-  document.getElementById('releaseList').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>发布单名称</th>
-          <th>版本号</th>
-          <th>状态</th>
-          <th>计划日期</th>
-          <th>变更数</th>
-          <th>已确认</th>
-          <th>高风险</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${releases.map(r => `
-          <tr>
-            <td><a href="javascript:void(0)" onclick="viewReleaseDetail(${r.id})" style="color:#1890ff">${r.name}</a></td>
-            <td>${r.version || '-'}</td>
-            <td><span class="badge badge-${r.status}">${getStatusText(r.status)}</span></td>
-            <td>${r.planned_date || '-'}</td>
-            <td>${r.change_count}</td>
-            <td>${r.confirmed_count}/${r.change_count}</td>
-            <td>${r.high_risk_count > 0 ? `<span class="badge badge-high">${r.high_risk_count}</span>` : '0'}</td>
-            <td>
-              <button class="btn" onclick="viewImpact(${r.id})">影响分析</button>
-            </td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
 }
 
-function getStatusText(status) {
-  const map = { pending: '待发布', testing: '测试中', staging: '预发布', released: '已发布' };
-  return map[status] || status;
+function ringProgress(score, size = 60) {
+  const grade = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+  const color = grade === 'high' ? '#ff4d4f' : grade === 'medium' ? '#faad14' : '#52c41a';
+  const r = (size - 12) / 2;
+  const c = 2 * Math.PI * r;
+  const offset = c - (score / 100) * c;
+  return '<div class="ring-progress ' + grade + '" style="width:' + size + 'px;height:' + size + 'px;">' +
+    '<svg width="' + size + '" height="' + size + '">' +
+    '<circle class="ring-bg" cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '"/>' +
+    '<circle class="ring-fill" stroke="' + color + '" cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" stroke-dasharray="' + c + '" stroke-dashoffset="' + offset + '"/>' +
+    '</svg><span class="ring-text">' + score + '</span></div>';
+}
+
+function triProgress(total, confirmed, pending, rejected) {
+  if (total === 0) {
+    return '<div class="progress-tri"><div style="flex:1;background:#f5f5f5;"></div></div>' +
+      '<div class="progress-legend"><span class="legend-item"><span class="legend-dot" style="background:#d9d9d9;"></span>暂无数据</span></div>';
+  }
+  const cpct = (confirmed / total * 100).toFixed(1);
+  const ppct = (pending / total * 100).toFixed(1);
+  const rpct = (rejected / total * 100).toFixed(1);
+  return '<div class="progress-tri">' +
+    (confirmed > 0 ? '<div class="progress-confirmed" style="width:' + cpct + '%;"></div>' : '') +
+    (pending > 0 ? '<div class="progress-pending" style="width:' + ppct + '%;"></div>' : '') +
+    (rejected > 0 ? '<div class="progress-rejected" style="width:' + rpct + '%;"></div>' : '') +
+    '</div><div class="progress-legend">' +
+    '<span class="legend-item"><span class="legend-dot" style="background:#52c41a;"></span>已确认 ' + confirmed + '</span>' +
+    '<span class="legend-item"><span class="legend-dot" style="background:#faad14;"></span>待处理 ' + pending + '</span>' +
+    '<span class="legend-item"><span class="legend-dot" style="background:#ff4d4f;"></span>退回 ' + rejected + '</span></div>';
 }
 
 function getRiskBadge(level) {
   const map = { high: 'badge-high', medium: 'badge-medium', low: 'badge-low' };
-  const text = { high: '高', medium: '中', low: '低' };
-  return `<span class="badge ${map[level] || ''}">${text[level] || level}</span>`;
+  const text = { high: '高风险', medium: '中风险', low: '低风险' };
+  return '<span class="badge ' + (map[level] || '') + '">' + (text[level] || level || '-') + '</span>';
 }
 
 function getTypeBadge(type) {
   const map = { add: 'badge-add', modify: 'badge-modify', delete: 'badge-delete' };
   const text = { add: '新增', modify: '修改', delete: '删除' };
-  return `<span class="badge ${map[type] || ''}">${text[type] || type}</span>`;
+  return '<span class="badge ' + (map[type] || '') + '">' + (text[type] || type || '-') + '</span>';
 }
 
-async function viewReleaseDetail(id) {
-  const data = await apiGet('/releases/' + id);
-  const r = data.data;
-  
-  document.getElementById('detailTitle').textContent = r.name;
-  document.getElementById('detailContent').innerHTML = `
-    <div style="margin-bottom: 20px;">
-      <p><strong>版本号：</strong>${r.version || '-'}</p>
-      <p><strong>状态：</strong><span class="badge badge-${r.status}">${getStatusText(r.status)}</span></p>
-      <p><strong>计划日期：</strong>${r.planned_date || '-'}</p>
-      <p><strong>描述：</strong>${r.description || '-'}</p>
-    </div>
-    <h4 style="margin-bottom: 12px;">变更列表</h4>
-    <div id="releaseChangesList"></div>
-  `;
-  
-  const changesData = await apiGet('/changes?release_id=' + id);
-  const changes = changesData.data;
-  
-  document.getElementById('releaseChangesList').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>文件路径</th>
-          <th>类型</th>
-          <th>模块</th>
-          <th>风险等级</th>
-          <th>提交人</th>
-          <th>确认状态</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${changes.map(c => `
-          <tr>
-            <td style="font-size: 12px; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${c.file_path}">${c.file_path}</td>
-            <td>${getTypeBadge(c.change_type)}</td>
-            <td>${c.module || '-'}</td>
-            <td>${getRiskBadge(c.risk_level)}</td>
-            <td>${c.committer || '-'}</td>
-            <td>${c.confirmed ? '<span class="badge badge-low">已确认</span>' : '<span class="badge badge-pending">待确认</span>'}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
-  
-  showModal('detailModal');
+function getConfirmBadge(c, r) {
+  if (r) return '<span class="badge badge-rejected">已退回</span>';
+  if (c) return '<span class="badge badge-confirmed">已确认</span>';
+  return '<span class="badge badge-pending">待处理</span>';
 }
 
-function viewImpact(releaseId) {
-  showPage('topology');
-  document.getElementById('topologyRelease').value = releaseId;
-  loadTopology();
+function getStatusBadge(status) {
+  const map = { pending: 'badge-pending', testing: 'badge-testing', staging: 'badge-staging', released: 'badge-released' };
+  const text = { pending: '待发布', testing: '测试中', staging: '预发布', released: '已发布' };
+  return '<span class="badge ' + (map[status] || '') + '">' + (text[status] || status) + '</span>';
 }
 
-async function loadTopologyInit() {
-  const releasesData = await apiGet('/releases');
-  const select = document.getElementById('topologyRelease');
-  select.innerHTML = releasesData.data.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-  loadTopology();
-}
-
-async function loadTopology() {
-  const releaseId = document.getElementById('topologyRelease').value;
-  if (!releaseId) return;
-  
-  const data = await apiGet('/impact/release/' + releaseId + '/topology');
-  const result = data.data;
-  
-  const container = document.getElementById('topologyContainer');
-  const nodes = result.nodes;
-  const edges = result.edges;
-  
-  const cols = Math.ceil(Math.sqrt(nodes.length));
-  const containerRect = container.getBoundingClientRect();
-  const nodeWidth = 120;
-  const nodeHeight = 50;
-  const padding = 40;
-  
-  const positions = {};
-  nodes.forEach((node, i) => {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const totalCols = Math.min(cols, nodes.length - row * cols);
-    const x = padding + col * ((containerRect.width - 2 * padding - nodeWidth) / Math.max(totalCols - 1, 1));
-    const y = padding + row * (nodeHeight + 60);
-    positions[node.id] = { x, y };
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, function(s) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s];
   });
+}
+
+async function loadDashboard() {
+  const data = await apiGet('/statistics/dashboard');
+  if (!data.data) return;
+  const d = data.data;
+  const ov = d.overview;
+  const pendingTotal = d.pending_changes ? d.pending_changes.length : 0;
+  const highTotal = d.high_risk_changes ? d.high_risk_changes.length : 0;
+  const cd = d.confirmation_distribution || [];
+  const confirmedTotal = cd.filter(function(x){return x.confirmed==1;}).reduce(function(s,x){return s+x.count;},0);
+
+  document.getElementById('headerStats').innerHTML =
+    '<span class="stat-item">✅ <span class="stat-num" style="color:#52c41a;">' + confirmedTotal + '</span> 已确认</span>' +
+    '<span class="stat-item">⏳ <span class="stat-num" style="color:#faad14;">' + pendingTotal + '</span> 待确认</span>' +
+    '<span class="stat-item">🔥 <span class="stat-num" style="color:#ff4d4f;">' + highTotal + '</span> 高风险</span>';
+
+  document.getElementById('overviewStats').innerHTML =
+    '<div class="stat-card"><div class="stat-value">' + ov.total_releases + '</div><div class="stat-label">发布单总数</div><div class="stat-sub">跨仓库协同发布</div></div>' +
+    '<div class="stat-card"><div class="stat-value">' + ov.total_changes + '</div><div class="stat-label">变更总数</div><div class="stat-sub">代码文件变更记录</div></div>' +
+    '<div class="stat-card high"><div class="stat-value">' + highTotal + '</div><div class="stat-label">高风险变更</div><div class="stat-sub">需重点关注验收</div></div>' +
+    '<div class="stat-card medium"><div class="stat-value">' + pendingTotal + '</div><div class="stat-label">待确认事项</div><div class="stat-sub">等待负责人审核</div></div>';
+
+  renderReleaseRiskList(d.releases || []);
+  renderPendingList(d.pending_changes || []);
+  renderTopRiskList(d.high_risk_changes || []);
+  renderProgressStats(d);
+}
+
+function renderReleaseRiskList(releases) {
+  const container = document.getElementById('releaseRiskList');
+  if (releases.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div>暂无发布单</div>';
+    return;
+  }
+  const toShow = releases.slice(0, 6);
+  container.innerHTML = toShow.map(function(r) {
+    const total = r.total_changes || 0;
+    const confirmed = r.confirmed_count || 0;
+    const rejected = r.rejected_count || 0;
+    const pending = r.pending_count || (total - confirmed - rejected);
+    const riskScore = r.risk_score || 'low';
+    const numericScore = riskScore === 'high' ? 85 : riskScore === 'medium' ? 55 : 20;
+    return '<div class="release-risk-card">' +
+      '<div class="risk-ring">' + ringProgress(numericScore, 56) + '</div>' +
+      '<div class="release-info">' +
+        '<div class="release-name" onclick="openReleaseDetail(' + r.id + ')">' + escapeHtml(r.name) + '</div>' +
+        '<div class="release-meta">' +
+          getStatusBadge(r.status) +
+          '<span>📦 ' + total + ' 项变更</span>' +
+          (r.high_risk_count > 0 ? '<span style="color:#ff4d4f;">🔥 ' + r.high_risk_count + ' 高风险</span>' : '') +
+          '<span>📅 ' + (r.planned_date || '-') + '</span>' +
+        '</div>' +
+        '<div class="release-progress">' + triProgress(total, confirmed, pending, rejected) + '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function renderPendingList(changes) {
+  const container = document.getElementById('pendingList');
+  document.getElementById('pendingTotalBadge').textContent = changes.length;
+  if (changes.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div>全部已确认</div>';
+    return;
+  }
+  const grouped = {};
+  changes.forEach(function(c) {
+    const key = c.risk_level || 'low';
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(c);
+  });
+  const ordered = ['high', 'medium', 'low'];
+  let html = '';
+  ordered.forEach(function(level) {
+    if (!grouped[level]) return;
+    const items = grouped[level].slice(0, 5);
+    html += '<div class="pending-item ' + level + '"><div class="pending-content">' +
+      items.map(function(c) {
+        return '<div style="margin-bottom:6px;">' +
+          '<div class="pending-file" title="' + escapeHtml(c.file_path) + '">' + escapeHtml(c.file_path) + '</div>' +
+          '<div class="pending-meta">' +
+            '<span>' + (c.release_name || '-') + '</span>' +
+            '<span>👤 ' + (c.committer || c.owner || '未分配') + '</span>' +
+            getTypeBadge(c.change_type) +
+          '</div></div>';
+      }).join('') +
+      '</div><div class="pending-count"><div class="num">' + grouped[level].length + '</div><div style="font-size:11px;color:#8c8c8c;">项</div></div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function renderTopRiskList(changes) {
+  const container = document.getElementById('topRiskList');
+  if (changes.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🎊</div>暂无高风险变更</div>';
+    return;
+  }
+  const toShow = changes.slice(0, 5);
+  container.innerHTML = toShow.map(function(c, i) {
+    const baseScore = c.risk_level === 'high' ? 80 : c.risk_level === 'medium' ? 50 : 20;
+    const score = Math.min(100, baseScore + (c.confirmed ? 0 : 10) + (c.requirement_id ? 0 : 5));
+    return '<div class="top5-item">' +
+      '<div class="rank top' + (i+1) + '">' + (i+1) + '</div>' +
+      '<div class="top5-info">' +
+        '<div class="top5-file" title="' + escapeHtml(c.file_path) + '">' + escapeHtml(c.file_path) + '</div>' +
+        '<div class="top5-meta">' +
+          '<span>' + (c.release_name || '-') + '</span>' +
+          '<span>' + (c.service_name || '-') + '</span>' +
+          (!c.confirmed && !c.rejected ? '<span style="color:#faad14;">⏳ 待确认</span>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="top5-score">' + ringProgress(score, 44) + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderProgressStats(d) {
+  const cd = d.confirmation_distribution || [];
+  const confirmed = cd.filter(function(x){return x.confirmed==1;}).reduce(function(s,x){return s+x.count;},0);
+  const rejected = cd.filter(function(x){return x.rejected==1;}).reduce(function(s,x){return s+x.count;},0);
+  const total = d.overview ? d.overview.total_changes : 0;
+  const pending = total - confirmed - rejected;
+  const rate = total > 0 ? Math.round(confirmed / total * 100) : 0;
+
+  document.getElementById('progressStats').innerHTML =
+    '<div class="progress-stat-item"><div class="psi-label">变更总数</div><div class="psi-value">' + total + '</div></div>' +
+    '<div class="progress-stat-item confirmed"><div class="psi-label">✅ 已确认</div><div class="psi-value">' + confirmed + '</div></div>' +
+    '<div class="progress-stat-item pending"><div class="psi-label">⏳ 待处理</div><div class="psi-value">' + pending + '</div></div>' +
+    '<div class="progress-stat-item rejected"><div class="psi-label">❌ 已退回</div><div class="psi-value">' + rejected + '</div></div>' +
+    '<div class="progress-stat-item"><div class="psi-label">📊 确认完成率</div><div class="psi-value" style="color:#1890ff;">' + rate + '%</div></div>';
+
+  renderOwnerDistribution(d.releases || []);
+  renderReleaseProgressList(d.releases || []);
+}
+
+function renderOwnerDistribution(releases) {
+  const container = document.getElementById('ownerDistribution');
+  const ownerStats = {};
+  (releases || []).forEach(function(r) {
+    const total = r.total_changes || 0;
+    if (total === 0) return;
+    const confirmed = r.confirmed_count || 0;
+    const rejected = r.rejected_count || 0;
+    const pending = total - confirmed - rejected;
+    const owner = r.owner || '未分配';
+    if (!ownerStats[owner]) ownerStats[owner] = { total: 0, confirmed: 0, rejected: 0, pending: 0 };
+    ownerStats[owner].total += total;
+    ownerStats[owner].confirmed += confirmed;
+    ownerStats[owner].rejected += rejected;
+    ownerStats[owner].pending += pending;
+  });
+  const entries = Object.entries(ownerStats).sort(function(a,b){return b[1].total - a[1].total;}).slice(0, 8);
+  if (entries.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:20px;">暂无数据</div>';
+    return;
+  }
+  container.innerHTML = entries.map(function(entry) {
+    const owner = entry[0], s = entry[1];
+    const cpct = (s.confirmed / s.total * 100).toFixed(0);
+    const ppct = (s.pending / s.total * 100).toFixed(0);
+    const rpct = (s.rejected / s.total * 100).toFixed(0);
+    const cstart = cpct;
+    const pstart = (+cpct);
+    return '<div class="owner-bar-item">' +
+      '<div class="owner-name" title="' + escapeHtml(owner) + '">' + escapeHtml(owner) + '</div>' +
+      '<div class="owner-bar-wrap">' +
+        '<div class="owner-bar-confirmed" style="width:' + cpct + '%;"></div>' +
+        '<div class="owner-bar-pending" style="width:' + ppct + '%; left:' + cstart + '%;"></div>' +
+        '<div class="owner-bar-rejected" style="width:' + rpct + '%; left:' + pstart + '%;"></div>' +
+      '</div>' +
+      '<div class="owner-count">' + s.confirmed + '/' + s.total + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderReleaseProgressList(releases) {
+  const container = document.getElementById('releaseProgressList');
+  if (!releases || releases.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:20px;">暂无数据</div>';
+    return;
+  }
+  const toShow = releases.slice(0, 6);
+  container.innerHTML = toShow.map(function(r) {
+    const total = r.total_changes || 0;
+    const confirmed = r.confirmed_count || 0;
+    const rejected = r.rejected_count || 0;
+    const pending = total - confirmed - rejected;
+    return '<div style="margin-bottom:12px;">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">' +
+        '<span style="font-size:13px;cursor:pointer;color:#595959;" onclick="openReleaseDetail(' + r.id + ')">' + escapeHtml(r.name) + '</span>' +
+        '<span style="font-size:12px;color:#8c8c8c;">' + confirmed + '/' + total + '</span>' +
+      '</div>' + triProgress(total, confirmed, pending, rejected) +
+    '</div>';
+  }).join('');
+}
+
+async function loadChangesInit() {
+  if (!state.filterOptions) {
+    const optData = await apiGet('/statistics/releases-filter-options');
+    state.filterOptions = optData.data || {};
+  }
+  renderFilterBar();
+  await loadReleasesForFilter();
+  await loadChanges();
+}
+
+function renderFilterBar() {
+  const opt = state.filterOptions || {};
+  const bar = document.getElementById('changesFilterBar');
+  bar.innerHTML =
+    '<select id="f_release" onchange="loadChanges()"><option value="">全部发布单</option></select>' +
+    '<select id="f_repository" onchange="loadChanges()"><option value="">全部仓库</option>' +
+      (opt.repositories||[]).map(function(r){return '<option value="'+r.id+'">'+escapeHtml(r.name)+'</option>';}).join('') +
+    '</select>' +
+    '<select id="f_service" onchange="loadChanges()"><option value="">全部服务</option>' +
+      (opt.services||[]).map(function(s){return '<option value="'+s.id+'">'+escapeHtml(s.name)+'</option>';}).join('') +
+    '</select>' +
+    '<select id="f_risk" onchange="loadChanges()"><option value="">全部风险等级</option>' +
+      (opt.risk_levels||[]).map(function(r){return '<option value="'+r.value+'">'+r.label+'</option>';}).join('') +
+    '</select>' +
+    '<select id="f_type" onchange="loadChanges()"><option value="">全部变更类型</option>' +
+      (opt.change_types||[]).map(function(t){return '<option value="'+t.value+'">'+t.label+'</option>';}).join('') +
+    '</select>' +
+    '<select id="f_status" onchange="loadChanges()"><option value="">全部确认状态</option>' +
+      (opt.confirm_statuses||[]).map(function(s){return '<option value="'+s.value+'">'+s.label+'</option>';}).join('') +
+    '</select>' +
+    '<select id="f_owner" onchange="loadChanges()"><option value="">全部负责人</option>' +
+      (opt.owners||[]).map(function(o){return '<option value="'+escapeHtml(o)+'">'+escapeHtml(o)+'</option>';}).join('') +
+    '</select>' +
+    '<input id="f_keyword" placeholder="搜索文件路径/描述/提交人..." style="flex:1;min-width:200px;" onkeyup="if(event.key===\'Enter\')loadChanges()">' +
+    '<button onclick="loadChanges()">🔍 搜索</button>' +
+    '<button class="btn btn-reset" onclick="resetFilters()">↻ 重置</button>';
+}
+
+async function loadReleasesForFilter() {
+  const relData = await apiGet('/releases');
+  const releases = relData.data || [];
+  const sel = document.getElementById('f_release');
+  if (sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">全部发布单</option>' +
+      releases.map(function(r){return '<option value="'+r.id+'">'+escapeHtml(r.name)+'</option>';}).join('');
+    sel.value = cur;
+  }
+}
+
+function resetFilters() {
+  ['f_release','f_repository','f_service','f_risk','f_type','f_status','f_owner','f_keyword'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  loadChanges();
+}
+
+async function loadChanges() {
+  const params = new URLSearchParams();
+  const fields = [
+    ['release_id', 'f_release'],
+    ['repository_id', 'f_repository'],
+    ['service_id', 'f_service'],
+    ['risk_level', 'f_risk'],
+    ['change_type', 'f_type'],
+    ['owner', 'f_owner'],
+    ['keyword', 'f_keyword']
+  ];
+  fields.forEach(function(pair) {
+    const k = pair[0], id = pair[1];
+    const v = document.getElementById(id) ? document.getElementById(id).value : '';
+    if (v) params.append(k, v);
+  });
+  const status = document.getElementById('f_status') ? document.getElementById('f_status').value : '';
+  if (status === 'confirmed') params.append('confirmed', 'true');
+  else if (status === 'rejected') params.append('rejected', 'true');
+  else if (status === 'pending') { params.append('confirmed', 'false'); params.append('rejected', 'false'); }
+
+  const qs = params.toString();
+  const url = '/changes' + (qs ? '?' + qs : '');
+  const data = await apiGet(url);
+  state.changes = data.data || [];
+  state.selectedIds.clear();
+  renderChangeList();
+  updateBatchToolbar();
+}
+
+function renderChangeList() {
+  const container = document.getElementById('changeListTable');
+  const changes = state.changes;
+  if (changes.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>暂无变更记录</div>';
+    return;
+  }
+  const allChecked = changes.length > 0 && changes.every(function(c){return state.selectedIds.has(c.id);});
+  const riskScoreCache = {};
+
+  container.innerHTML =
+    '<table><thead><tr>' +
+      '<th class="checkbox-col"><input type="checkbox" ' + (allChecked ? 'checked' : '') + ' onchange="toggleSelectAll(this.checked)"></th>' +
+      '<th>发布单</th><th>风险评分</th><th>文件路径</th><th>服务/模块</th><th>类型</th><th>提交人/负责人</th><th>确认进度</th><th>操作</th>' +
+    '</tr></thead><tbody>' +
+    changes.map(function(c) {
+      const rid = c.release_id;
+      if (!riskScoreCache[rid]) riskScoreCache[rid] = {};
+      let score = riskScoreCache[rid][c.id];
+      if (!score) {
+        const base = c.risk_level === 'high' ? 75 : c.risk_level === 'medium' ? 45 : 20;
+        const unconfirmed = c.confirmed ? 0 : 8;
+        const noreq = c.requirement_id ? 0 : 7;
+        score = Math.min(100, base + unconfirmed + noreq);
+        riskScoreCache[rid][c.id] = score;
+      }
+      const total = 1, confirmed = c.confirmed ? 1 : 0, rejected = c.rejected ? 1 : 0, pending = (!c.confirmed && !c.rejected) ? 1 : 0;
+      return '<tr>' +
+        '<td class="checkbox-col"><input type="checkbox" ' + (state.selectedIds.has(c.id) ? 'checked' : '') + ' onchange="toggleSelect(' + c.id + ', this.checked)"></td>' +
+        '<td><span style="cursor:pointer;color:#1890ff;" onclick="openReleaseDetail(' + c.release_id + ')">' + escapeHtml(c.release_name || '-') + '</span></td>' +
+        '<td><div style="display:flex;align-items:center;gap:8px;">' + ringProgress(score, 40) + getRiskBadge(c.risk_level) + '</div></td>' +
+        '<td style="font-size:12px;font-family:Consolas,monospace;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + escapeHtml(c.file_path) + '">' + escapeHtml(c.file_path) + '</td>' +
+        '<td>' + escapeHtml(c.service_name || '-') + (c.module ? ' / ' + escapeHtml(c.module) : '') + '</td>' +
+        '<td>' + getTypeBadge(c.change_type) + '</td>' +
+        '<td>' + escapeHtml(c.committer || '-') + (c.owner && c.owner !== c.committer ? ' / <strong>' + escapeHtml(c.owner) + '</strong>' : '') + '</td>' +
+        '<td style="min-width:120px;"><div style="margin-bottom:4px;">' + getConfirmBadge(c.confirmed, c.rejected) + '</div><div style="width:120px;">' + triProgress(total, confirmed, pending, rejected) + '</div></td>' +
+        '<td><button class="btn btn-sm btn-primary" onclick="openChangeDetail(' + c.id + ')">详情</button></td>' +
+      '</tr>';
+    }).join('') +
+    '</tbody></table>';
+}
+
+function toggleSelect(id, checked) {
+  if (checked) state.selectedIds.add(id);
+  else state.selectedIds.delete(id);
+  updateBatchToolbar();
+  renderChangeList();
+}
+
+function toggleSelectAll(checked) {
+  state.selectedIds.clear();
+  if (checked) state.changes.forEach(function(c){state.selectedIds.add(c.id);});
+  updateBatchToolbar();
+  renderChangeList();
+}
+
+function updateBatchToolbar() {
+  const toolbar = document.getElementById('batchToolbar');
+  const count = state.selectedIds.size;
+  document.getElementById('selectedCount').textContent = count;
+  toolbar.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function openBatchConfirmModal() {
+  const count = state.selectedIds.size;
+  if (count === 0) { alert('请先选择要确认的变更'); return; }
+  document.getElementById('batchConfirmCount').textContent = count;
+  document.getElementById('batchConfirmBy').value = '';
+  document.getElementById('batchConfirmComment').value = '';
+  showModal('batchConfirmModal');
+}
+
+function openBatchRejectModal() {
+  const count = state.selectedIds.size;
+  if (count === 0) { alert('请先选择要退回的变更'); return; }
+  document.getElementById('batchRejectCount').textContent = count;
+  document.getElementById('batchRejectBy').value = '';
+  document.getElementById('batchRejectReason').value = '';
+  document.getElementById('batchRejectComment').value = '';
+  showModal('batchRejectModal');
+}
+
+async function executeBatchConfirm() {
+  const confirmedBy = document.getElementById('batchConfirmBy').value.trim();
+  if (!confirmedBy) { alert('请输入确认人'); return; }
+  const comment = document.getElementById('batchConfirmComment').value.trim();
+  const ids = Array.from(state.selectedIds);
+  const res = await apiPost('/changes/batch-confirm', { ids, confirmed_by: confirmedBy, comment });
+  alert(res.message || '操作完成');
+  closeModal('batchConfirmModal');
+  refreshAll();
+}
+
+async function executeBatchReject() {
+  const rejectedBy = document.getElementById('batchRejectBy').value.trim();
+  const reason = document.getElementById('batchRejectReason').value.trim();
+  if (!rejectedBy) { alert('请输入退回人'); return; }
+  if (!reason) { alert('请输入退回原因'); return; }
+  const comment = document.getElementById('batchRejectComment').value.trim();
+  const ids = Array.from(state.selectedIds);
+  const res = await apiPost('/changes/batch-reject', { ids, rejected_by: rejectedBy, reason, comment });
+  alert(res.message || '操作完成');
+  closeModal('batchRejectModal');
+  refreshAll();
+}
+
+function refreshAll() {
+  if (state.currentPage === 'dashboard') loadDashboard();
+  else if (state.currentPage === 'changes') loadChanges();
+  else if (state.currentPage === 'operations') loadOperationList();
+}
+
+async function openReleaseDetail(releaseId) {
+  state.currentReleaseId = releaseId;
+  state.currentDetailTab = 'overview';
+  const relData = await apiGet('/releases/' + releaseId);
+  const progressData = await apiGet('/changes/confirmation-progress/' + releaseId);
+  const impactData = await apiGet('/impact/release/' + releaseId);
+  const release = relData.data || {};
+  const progress = progressData.data || {};
+  const impact = impactData.data || {};
   
-  let svg = `<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; pointer-events: none;">`;
-  edges.forEach(edge => {
-    const from = positions[edge.from];
-    const to = positions[edge.to];
-    if (from && to) {
-      const x1 = from.x + nodeWidth / 2;
-      const y1 = from.y + nodeHeight / 2;
-      const x2 = to.x + nodeWidth / 2;
-      const y2 = to.y + nodeHeight / 2;
-      const color = edge.type === 'rpc' ? '#1890ff' : edge.type === 'http' ? '#52c41a' : '#faad14';
-      svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="1.5" stroke-dasharray="${edge.type === 'db' ? '5,5' : ''}" />`;
+  document.getElementById('releaseDetailTitle').textContent = release.name || '发布单详情';
+  renderReleaseDetailBody(release, progress, impact);
+  showModal('releaseDetailModal');
+}
+
+function renderReleaseDetailBody(release, progress, impact) {
+  const total = progress.total || 0;
+  const confirmed = progress.confirmed || 0;
+  const rejected = progress.rejected || 0;
+  const pending = progress.pending || 0;
+  const riskScore = impact.risk_score || {};
+  const score = riskScore.score || (release.risk_score === 'high' ? 85 : release.risk_score === 'medium' ? 55 : 20);
+  const grade = riskScore.overall_risk || release.risk_score || 'low';
+  
+  const body = document.getElementById('releaseDetailBody');
+  const services = impact.impacted_services || [];
+  const tables = impact.impacted_tables || [];
+  const assessments = riskScore.score_details?.change_risk_scores || [];
+  const dist = Object.entries(progress.owner_distribution || {}).sort(function(a,b){return b[1].total - a[1].total;});
+  
+  body.innerHTML =
+    '<div class="stat-grid">' +
+      '<div class="stat-card"><div class="stat-value" style="font-size:22px;">📦 ' + total + '</div><div class="stat-label">变更总数</div></div>' +
+      '<div class="stat-card ' + grade + '"><div class="stat-value" style="display:flex;align-items:center;gap:12px;">' + ringProgress(score, 50) + ' ' + score + '</div><div class="stat-label">整体风险评分</div></div>' +
+      '<div class="stat-card confirmed"><div class="stat-value">' + confirmed + '</div><div class="stat-label">已确认</div></div>' +
+      '<div class="stat-card pending"><div class="stat-value">' + pending + '</div><div class="stat-label">待处理</div></div>' +
+      '<div class="stat-card rejected"><div class="stat-value">' + rejected + '</div><div class="stat-label">已退回</div></div>' +
+    '</div>' +
+    '<div class="card" style="padding:16px;margin-bottom:16px;">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:12px;">' +
+        '<div><strong>' + escapeHtml(release.name || '') + '</strong> ' + getStatusBadge(release.status) + '</div>' +
+        '<div style="color:#8c8c8c;font-size:13px;">版本: ' + escapeHtml(release.version || '-') + ' | 计划日期: ' + (release.planned_date || '-') + '</div>' +
+      '</div>' +
+      triProgress(total, confirmed, pending, rejected) +
+    '</div>' +
+    '<div class="tabs">' +
+      '<div class="tab-item active" onclick="switchDetailTab(\'overview\', event)">📊 概览<span class="tab-badge"></span></div>' +
+      '<div class="tab-item" onclick="switchDetailTab(\'impact\', event)">🔗 影响范围<span class="tab-badge">' + services.length + '</span></div>' +
+      '<div class="tab-item" onclick="switchDetailTab(\'risk\', event)">⚠️ 风险明细<span class="tab-badge">' + assessments.length + '</span></div>' +
+      '<div class="tab-item" onclick="switchDetailTab(\'confirm\', event)">✅ 确认列表<span class="tab-badge">' + total + '</span></div>' +
+      '<div class="tab-item" onclick="switchDetailTab(\'topology\', event)">🕸️ 拓扑图<span class="tab-badge"></span></div>' +
+      '<div class="tab-item" onclick="switchDetailTab(\'db\', event)">🗄️ 数据库<span class="tab-badge">' + tables.length + '</span></div>' +
+    '</div>' +
+    '<div id="tab-overview" class="tab-pane active">' + renderTabOverview(release, progress, impact, riskScore, dist) + '</div>' +
+    '<div id="tab-impact" class="tab-pane">' + renderTabImpact(services) + '</div>' +
+    '<div id="tab-risk" class="tab-pane">' + renderTabRisk(assessments, riskScore) + '</div>' +
+    '<div id="tab-confirm" class="tab-pane">' + renderTabConfirm(release.id) + '</div>' +
+    '<div id="tab-topology" class="tab-pane"><div id="topologyArea">' + renderTabTopology(release.id) + '</div></div>' +
+    '<div id="tab-db" class="tab-pane">' + renderTabDb(tables) + '</div>';
+}
+
+function switchDetailTab(tabName, evt) {
+  document.querySelectorAll('#releaseDetailBody .tab-item').forEach(function(t){t.classList.remove('active');});
+  if (evt && evt.target) evt.target.classList.add('active');
+  document.querySelectorAll('#releaseDetailBody .tab-pane').forEach(function(p){p.classList.remove('active');});
+  const pane = document.getElementById('tab-' + tabName);
+  if (pane) pane.classList.add('active');
+  state.currentDetailTab = tabName;
+  if (tabName === 'topology') renderTabTopologyDeferred();
+  if (tabName === 'confirm') renderTabConfirmDeferred();
+}
+
+function renderTabOverview(release, progress, impact, riskScore, dist) {
+  const reasons = riskScore.risk_reasons || [];
+  const suggestions = riskScore.suggestions || [];
+  const ra = impact.risk_assessment || {};
+  let html = '';
+  html += '<div class="two-col">';
+  html += '<div><div class="card-title" style="font-size:14px;margin-bottom:12px;">📌 发布单信息</div>';
+  html += '<div style="font-size:13px;line-height:2;color:#595959;">';
+  html += '<p><strong>描述：</strong>' + escapeHtml(release.description || '暂无描述') + '</p>';
+  html += '<p><strong>仓库：</strong>' + (impact.direct_changed_services ? '涉及 ' + impact.direct_changed_services.length + ' 个变更服务' : '-') + '</p>';
+  html += '<p><strong>提交人：</strong>' + (impact.committers ? impact.committers.join(', ') : '-') + '</p>';
+  html += '<p><strong>影响模块：</strong>' + (impact.changed_modules ? impact.changed_modules.join(', ') : '-') + '</p>';
+  html += '</div></div>';
+  html += '<div><div class="card-title" style="font-size:14px;margin-bottom:12px;">📊 影响评估</div>';
+  html += '<div style="font-size:13px;line-height:2;color:#595959;">';
+  html += '<p>🔥 高风险变更：<strong style="color:#ff4d4f;">' + (ra.high_risk_count || 0) + '</strong> 个</p>';
+  html += '<p>🔗 跨服务影响：<strong style="color:#1890ff;">' + (ra.cross_service_impact_count || 0) + '</strong> 个服务</p>';
+  html += '<p>🗄️ 数据库影响：<strong style="color:#faad14;">' + (ra.db_changes_count || 0) + '</strong> 处</p>';
+  html += '<p>📋 未关联需求：<strong style="color:#ff4d4f;">' + (ra.unlinked_requirements_count || 0) + '</strong> 个</p>';
+  html += '</div></div>';
+  html += '</div>';
+  if (reasons.length > 0) {
+    html += '<div class="risk-detail-card ' + (riskScore.overall_risk || 'medium') + '" style="margin-top:16px;">';
+    html += '<div class="rdc-label">⚠️ 风险原因</div>';
+    html += '<ul class="rdc-reasons">';
+    reasons.forEach(function(r){ html += '<li>' + escapeHtml(r) + '</li>'; });
+    html += '</ul>';
+    if (suggestions.length > 0) {
+      html += '<div class="rdc-label">💡 建议措施</div>';
+      html += '<ul class="rdc-suggestions">';
+      suggestions.forEach(function(s){ html += '<li>' + escapeHtml(s) + '</li>'; });
+      html += '</ul>';
     }
-  });
-  svg += `</svg>`;
-  
-  let nodesHtml = '';
-  nodes.forEach(node => {
-    const pos = positions[node.id];
-    const riskClass = node.type === 'changed' ? (node.risk_level + '-risk') : '';
-    const typeLabel = node.type === 'changed' ? '变更服务' : '受影响服务';
-    nodesHtml += `
-      <div class="topology-node ${node.type === 'changed' ? 'changed' : ''} ${riskClass}" style="left: ${pos.x}px; top: ${pos.y}px;" onclick="viewServiceImpact(${node.id}, ${releaseId})">
-        <div class="topology-label">${node.name}</div>
-        <div class="topology-sub">${typeLabel}</div>
-      </div>
-    `;
-  });
-  
-  container.innerHTML = svg + nodesHtml;
-  
-  const analysis = result.analysis;
-  document.getElementById('impactDetails').innerHTML = `
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
-      <div class="stat-card"><div class="stat-value">${analysis.total_changes}</div><div class="stat-label">变更总数</div></div>
-      <div class="stat-card high"><div class="stat-value">${analysis.risk_assessment.cross_service_impact_count}</div><div class="stat-label">跨服务影响</div></div>
-      <div class="stat-card medium"><div class="stat-value">${analysis.risk_assessment.db_changes_count}</div><div class="stat-label">数据库变更</div></div>
-      <div class="stat-card ${analysis.risk_assessment.overall_risk}"><div class="stat-value">${analysis.risk_assessment.overall_risk === 'high' ? '高' : analysis.risk_assessment.overall_risk === 'medium' ? '中' : '低'}</div><div class="stat-label">整体风险</div></div>
-    </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      <div>
-        <h4 style="margin-bottom: 12px;">跨服务影响 (${analysis.cross_service_impact.length})</h4>
-        ${analysis.cross_service_impact.length === 0 ? '<div class="empty-state" style="padding: 20px;">无跨服务影响</div>' : 
-          analysis.cross_service_impact.map(s => `
-            <div style="padding: 8px 12px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: 4px; margin-bottom: 8px;">
-              <strong>${s.service_name}</strong>
-              <div style="font-size: 12px; color: #8c8c8c; margin-top: 4px;">
-                影响原因: ${s.impact_reasons.join(', ')}
-              </div>
-            </div>
-          `).join('')
-        }
-      </div>
-      <div>
-        <h4 style="margin-bottom: 12px;">数据库影响 (${analysis.impacted_tables.length})</h4>
-        ${analysis.impacted_tables.length === 0 ? '<div class="empty-state" style="padding: 20px;">无数据库影响</div>' :
-          analysis.impacted_tables.map(t => `
-            <div style="padding: 8px 12px; background: ${t.is_direct_change ? '#fff1f0' : '#e6f7ff'}; border: 1px solid ${t.is_direct_change ? '#ffa39e' : '#91d5ff'}; border-radius: 4px; margin-bottom: 8px;">
-              <strong>${t.name}</strong>
-              <span style="font-size: 12px; color: #8c8c8c; margin-left: 8px;">${t.database_name}</span>
-              <span class="badge ${t.is_direct_change ? 'badge-high' : 'badge-pending'}" style="margin-left: 8px;">${t.is_direct_change ? '直接变更' : '受影响'}</span>
-            </div>
-          `).join('')
-        }
-      </div>
-    </div>
-  `;
-}
-
-async function loadDependenciesInit() {
-  const servicesData = await apiGet('/services');
-  const select = document.getElementById('depServiceFilter');
-  select.innerHTML = '<option value="">全部服务</option>' + servicesData.data.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-  loadDependencies();
-}
-
-async function loadDependencies() {
-  const serviceId = document.getElementById('depServiceFilter').value;
-  const depType = document.getElementById('depTypeFilter').value;
-  
-  const data = await apiGet('/services/dependencies');
-  let deps = data.data;
-  
-  if (serviceId) {
-    deps = deps.filter(d => d.from_service_id == serviceId || d.to_service_id == serviceId);
+    html += '</div>';
   }
-  if (depType) {
-    deps = deps.filter(d => d.dependency_type === depType);
+  if (dist.length > 0) {
+    html += '<div style="margin-top:16px;"><div class="card-title" style="font-size:14px;margin-bottom:12px;">👥 负责人确认进度</div>';
+    dist.forEach(function(entry) {
+      const owner = entry[0], s = entry[1];
+      const cpct = s.total > 0 ? (s.confirmed / s.total * 100).toFixed(0) : 0;
+      const ppct = s.total > 0 ? (s.pending / s.total * 100).toFixed(0) : 0;
+      const rpct = s.total > 0 ? (s.rejected / s.total * 100).toFixed(0) : 0;
+      html += '<div class="owner-bar-item">' +
+        '<div class="owner-name" title="' + escapeHtml(owner) + '">' + escapeHtml(owner) + '</div>' +
+        '<div class="owner-bar-wrap">' +
+          '<div class="owner-bar-confirmed" style="width:' + cpct + '%;"></div>' +
+          '<div class="owner-bar-pending" style="width:' + ppct + '%; left:' + cpct + '%;"></div>' +
+          '<div class="owner-bar-rejected" style="width:' + rpct + '%; left:' + ((+cpct)+(+ppct)) + '%;"></div>' +
+        '</div>' +
+        '<div class="owner-count">' + s.confirmed + '/' + s.total + '</div>' +
+      '</div>';
+    });
+    html += '</div>';
   }
-  
-  if (deps.length === 0) {
-    document.getElementById('dependencyTable').innerHTML = '<div class="empty-state">暂无依赖关系</div>';
-    return;
-  }
-  
-  document.getElementById('dependencyTable').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>源服务</th>
-          <th>源仓库</th>
-          <th>依赖类型</th>
-          <th>目标服务</th>
-          <th>目标仓库</th>
-          <th>说明</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${deps.map(d => `
-          <tr>
-            <td><strong>${d.from_service_name}</strong></td>
-            <td>${d.from_repository_name || '-'}</td>
-            <td>${getDepTypeBadge(d.dependency_type)}</td>
-            <td><strong>${d.to_service_name}</strong></td>
-            <td>${d.to_repository_name || '-'}</td>
-            <td>${d.description || '-'}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
+  return html;
 }
-
-function getDepTypeBadge(type) {
-  const map = { rpc: 'badge-pending', http: 'badge-low', db: 'badge-medium' };
-  const text = { rpc: 'RPC', http: 'HTTP', db: '数据库' };
-  return `<span class="badge ${map[type] || ''}">${text[type] || type}</span>`;
-}
-
-async function loadRiskInit() {
-  const [releasesData, servicesData] = await Promise.all([
-    apiGet('/releases'),
-    apiGet('/services')
-  ]);
-  
-  document.getElementById('riskReleaseFilter').innerHTML = '<option value="">全部发布单</option>' + releasesData.data.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-  document.getElementById('riskServiceFilter').innerHTML = '<option value="">全部服务</option>' + servicesData.data.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-  
-  loadRiskChanges();
-}
-
-async function loadRiskChanges() {
-  const level = document.getElementById('riskLevelFilter').value;
-  const releaseId = document.getElementById('riskReleaseFilter').value;
-  const serviceId = document.getElementById('riskServiceFilter').value;
-  
-  let url = '/changes?';
-  if (level) url += 'risk_level=' + level + '&';
-  if (releaseId) url += 'release_id=' + releaseId + '&';
-  if (serviceId) url += 'service_id=' + serviceId;
-  
-  const data = await apiGet(url);
-  const changes = data.data;
-  
-  if (changes.length === 0) {
-    document.getElementById('riskChangeList').innerHTML = '<div class="empty-state">暂无变更</div>';
-    return;
-  }
-  
-  document.getElementById('riskChangeList').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>发布单</th>
-          <th>文件路径</th>
-          <th>服务</th>
-          <th>风险等级</th>
-          <th>提交人</th>
-          <th>关联需求</th>
-          <th>确认状态</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${changes.map(c => `
-          <tr>
-            <td>${c.release_name || '-'}</td>
-            <td style="font-size: 12px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${c.file_path}">${c.file_path}</td>
-            <td>${c.service_name || '-'}</td>
-            <td>${getRiskBadge(c.risk_level)}</td>
-            <td>${c.committer || '-'}</td>
-            <td>${c.requirement_id ? c.requirement_id : '<span style="color:#ff4d4f">未关联</span>'}</td>
-            <td>${c.confirmed ? '<span class="badge badge-low">已确认</span>' : '<span class="badge badge-pending">待确认</span>'}</td>
-            <td>
-              ${!c.confirmed ? `<button class="btn btn-success" onclick="confirmChange(${c.id})">确认</button>` : ''}
-            </td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
-}
-
-async function confirmChange(id) {
-  if (!confirm('确认该变更已审核通过？')) return;
-  
-  const data = await apiPost('/changes/' + id + '/confirm', { confirmed_by: '当前用户' });
-  if (data.data) {
-    alert('确认成功');
-    loadRiskChanges();
-  }
-}
-
-async function loadPendingInit() {
-  const [releasesData, servicesData] = await Promise.all([
-    apiGet('/releases'),
-    apiGet('/services')
-  ]);
-  
-  document.getElementById('pendingReleaseFilter').innerHTML = '<option value="">全部发布单</option>' + releasesData.data.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-  document.getElementById('pendingServiceFilter').innerHTML = '<option value="">全部服务</option>' + servicesData.data.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-  
-  loadPendingChanges();
-}
-
-async function loadPendingChanges() {
-  const releaseId = document.getElementById('pendingReleaseFilter').value;
-  const serviceId = document.getElementById('pendingServiceFilter').value;
-  const risk = document.getElementById('pendingRiskFilter').value;
-  
-  let url = '/changes/pending?';
-  if (releaseId) url += 'release_id=' + releaseId + '&';
-  if (serviceId) url += 'service_id=' + serviceId + '&';
-  if (risk) url += 'risk_level=' + risk;
-  
-  const data = await apiGet(url);
-  const changes = data.data;
-  
-  if (changes.length === 0) {
-    document.getElementById('pendingChangeList').innerHTML = '<div class="empty-state">暂无待确认项</div>';
-    return;
-  }
-  
-  document.getElementById('pendingChangeList').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>发布单</th>
-          <th>文件路径</th>
-          <th>模块</th>
-          <th>服务</th>
-          <th>风险等级</th>
-          <th>提交人</th>
-          <th>需求</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${changes.map(c => `
-          <tr>
-            <td>${c.release_name || '-'}</td>
-            <td style="font-size: 12px; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${c.file_path}">${c.file_path}</td>
-            <td>${c.module || '-'}</td>
-            <td>${c.service_name || '-'}</td>
-            <td>${getRiskBadge(c.risk_level)}</td>
-            <td>${c.committer || '-'}</td>
-            <td>${c.requirement_id || '<span style="color:#ff4d4f">无</span>'}</td>
-            <td>
-              <button class="btn btn-primary" onclick="viewChangeDetail(${c.id})">详情</button>
-              <button class="btn btn-success" onclick="confirmChangeInPending(${c.id})">确认</button>
-            </td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
-}
-
-async function confirmChangeInPending(id) {
-  if (!confirm('确认该变更已审核通过？')) return;
-  
-  const data = await apiPost('/changes/' + id + '/confirm', { confirmed_by: '当前用户' });
-  if (data.data) {
-    alert('确认成功');
-    loadPendingChanges();
-  }
-}
-
-async function viewChangeDetail(id) {
-  const data = await apiGet('/changes/' + id);
-  const c = data.data;
-  
-  document.getElementById('detailTitle').textContent = '变更详情';
-  document.getElementById('detailContent').innerHTML = `
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-      <div><p><strong>文件路径：</strong><br><code style="background:#f5f5f5; padding:4px 8px; border-radius:4px; font-size:12px;">${c.file_path}</code></p></div>
-      <div><p><strong>变更类型：</strong>${getTypeBadge(c.change_type)}</p></div>
-      <div><p><strong>所属模块：</strong>${c.module || '-'}</p></div>
-      <div><p><strong>所属服务：</strong>${c.service_name || '-'}</p></div>
-      <div><p><strong>所属仓库：</strong>${c.repository_name || '-'}</p></div>
-      <div><p><strong>风险等级：</strong>${getRiskBadge(c.risk_level)}</p></div>
-      <div><p><strong>提交人：</strong>${c.committer || '-'}</p></div>
-      <div><p><strong>发布单：</strong>${c.release_name || '-'}</p></div>
-      <div><p><strong>关联需求：</strong>${c.requirement_id ? c.requirement_id + ' - ' + (c.requirement_title || '') : '<span style="color:#ff4d4f">未关联</span>'}</p></div>
-      <div><p><strong>确认状态：</strong>${c.confirmed ? '已确认 (' + (c.confirmed_by || '') + ')' : '待确认'}</p></div>
-    </div>
-    <div style="margin-top: 16px;">
-      <p><strong>变更说明：</strong></p>
-      <p style="background:#f5f5f5; padding:12px; border-radius:4px;">${c.description || '暂无说明'}</p>
-    </div>
-    <div style="margin-top: 16px; text-align: right;">
-      ${!c.confirmed ? `<button class="btn btn-success" onclick="confirmChangeInModal(${c.id})">确认变更</button>` : ''}
-    </div>
-  `;
-  
-  showModal('detailModal');
-}
-
-async function confirmChangeInModal(id) {
-  if (!confirm('确认该变更已审核通过？')) return;
-  
-  const data = await apiPost('/changes/' + id + '/confirm', { confirmed_by: '当前用户' });
-  if (data.data) {
-    alert('确认成功');
-    closeModal('detailModal');
-    loadPendingChanges();
-    loadRiskChanges();
-  }
-}
-
-async function loadBoard() {
-  const data = await apiGet('/statistics/release-board');
-  const board = data.data;
-  
-  document.getElementById('releaseBoard').innerHTML = `
-    <div class="board-column">
-      <h3>📋 待发布 (${board.todo.length})</h3>
-      ${board.todo.map(r => renderBoardCard(r)).join('')}
-    </div>
-    <div class="board-column">
-      <h3>🔄 进行中 (${board.in_progress.length})</h3>
-      ${board.in_progress.map(r => renderBoardCard(r)).join('')}
-      ${board.in_progress.length === 0 ? '<div class="empty-state" style="padding: 20px;">暂无</div>' : ''}
-    </div>
-    <div class="board-column">
-      <h3>✅ 已发布 (${board.done.length})</h3>
-      ${board.done.map(r => renderBoardCard(r)).join('')}
-    </div>
-  `;
-}
-
-function renderBoardCard(r) {
-  const progress = r.total_changes > 0 ? Math.round(r.confirmed_count / r.total_changes * 100) : 0;
-  return `
-    <div class="board-card" onclick="viewReleaseDetail(${r.id})">
-      <div class="card-title">${r.name}</div>
-      <div style="font-size: 12px; color: #8c8c8c; margin-bottom: 8px;">${r.version || ''} · ${r.planned_date || ''}</div>
-      <div class="progress-bar">
-        <div class="progress-fill" style="width: ${progress}%"></div>
-      </div>
-      <div class="card-meta">
-        <span>变更: ${r.total_changes}</span>
-        <span>已确认: ${r.confirmed_count}</span>
-      </div>
-      <div class="card-meta" style="margin-top: 4px;">
-        ${r.high_risk_count > 0 ? `<span class="badge badge-high">高风险 ${r.high_risk_count}</span>` : ''}
-        ${r.unlinked_req_count > 0 ? `<span class="badge badge-medium">未关联需求 ${r.unlinked_req_count}</span>` : ''}
-      </div>
-    </div>
-  `;
-}
-
-function showCreateReleaseModal() {
-  document.getElementById('newReleaseName').value = '';
-  document.getElementById('newReleaseVersion').value = '';
-  document.getElementById('newReleaseDate').value = '';
-  document.getElementById('newReleaseStatus').value = 'pending';
-  document.getElementById('newReleaseDesc').value = '';
-  showModal('releaseModal');
-}
-
-async function createRelease() {
-  const name = document.getElementById('newReleaseName').value;
-  const version = document.getElementById('newReleaseVersion').value;
-  const date = document.getElementById('newReleaseDate').value;
-  const status = document.getElementById('newReleaseStatus').value;
-  const desc = document.getElementById('newReleaseDesc').value;
-  
-  if (!name) {
-    alert('请输入发布单名称');
-    return;
-  }
-  
-  const data = await apiPost('/releases', {
-    name, version, status, planned_date: date, description: desc
-  });
-  
-  if (data.data) {
-    alert('创建成功');
-    closeModal('releaseModal');
-    loadReleases();
-  }
-}
-
-function showModal(id) {
-  document.getElementById(id).classList.add('active');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('active');
-}
-
-window.onload = function() {
-  loadDashboard();
-};
-
-function viewServiceImpact(serviceId, releaseId) {
-  alert('服务 ID: ' + serviceId + '\n发布单 ID: ' + releaseId + '\n\n点击确认查看该服务的详细影响分析。');
-}
-</script>
-</body>
-</html>
