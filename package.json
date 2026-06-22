@@ -1,0 +1,19 @@
+{
+  "name": "multi-repo-release-impact-analyzer",
+  "version": "1.0.0",
+  "description": "多仓库发布变更影响分析平台",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node scripts/initDb.js",
+    "seed": "node scripts/seedData.js",
+    "test-api": "node tests/apiTest.js",
+    "lint": "node -e \"const fs=require('fs');const path=require('path');function walk(d){fs.readdirSync(d).forEach(f=>{const p=path.join(d,f);const s=fs.statSync(p);if(s.isDirectory())walk(p);else if(f.endsWith('.js')){try{new Function(fs.readFileSync(p,'utf8'));console.log('OK:',p)}catch(e){console.log('ERR:',p,e.message)}}})}walk('.')"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "sql.js": "^1.14.1"
+  }
+}
